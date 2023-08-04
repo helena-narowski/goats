@@ -1,0 +1,21 @@
+{
+  "name": "app",
+  "private": "true",
+  "dependencies": {
+    "@babel/preset-env": "^7.22.9",
+    "@babel/preset-react": "^7.22.5",
+    "@hotwired/stimulus": "^3.2.1",
+    "@hotwired/turbo-rails": "^7.3.0",
+    "babel-jest": "^29.6.2",
+    "esbuild": "^0.18.17",
+    "jest": "^29.6.2",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-test-renderer": "^18.2.0",
+    "remount": "^1.0.0",
+    "save-dev": "^0.0.1-security"
+  },
+  "scripts": {
+    "build": "esbuild app/javascript/*.* --bundle --sourcemap --outdir=app/assets/builds --public-path=/assets"
+  }
+}
