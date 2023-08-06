@@ -26,7 +26,9 @@ class GoalsController < ApplicationController
   end
 
   def destroy
-    if goal.destroy
+    if goal.logs.any?
+      render json: { error: 'Goal cannot be deleted as it has logs associated with it' }, status: :unprocessable_entity
+    elsif goal.destroy
       render json: { message: 'Goal successfully deleted' }, status: :ok
     else
       render json: { error: 'Failed to delete goal' }, status: :unprocessable_entity

@@ -11,6 +11,8 @@ import {
   getGoals, createGoal, deleteGoal, updateGoal,
 } from '../../services/goalService';
 
+import Week from './Week';
+
 // import './home.css';
 
 const goat1 = require('../../images/goat1.jpg');
@@ -164,6 +166,8 @@ function Home() {
           Add Goal
         </Button>
       </form>
+
+      <Week goals={goals} />
     </div>
   );
 }
