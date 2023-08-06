@@ -113,36 +113,39 @@ function Week({ goals }) {
                   {goal.name}
                 </TableCell>
 
-                {daysOfWeek.map((day) => (
-                  <TableCell key={day}>
-                    {getLogForGoal(goal, weekDates[day])
-                      ? (
-                        <div>
-                          {getLogForGoal(goal, weekDates[day]).note}
-                          {' '}
-                          DONE!
-                          <Button color="primary" onClick={() => handleClear(getLogForGoal(goal, weekDates[day]))}>
-                            <BackspaceIcon />
-                          </Button>
-                          <IconButton onClick={() => {
-                            setCurrentGoal(goal);
-                            setEditedNote(getLogForGoal(goal, weekDates[day]).note);
-                            setCurrentLog(getLogForGoal(goal, weekDates[day]));
-                            setOpenModal(true);
-                          }}
-                          >
-                            <EditIcon />
-                          </IconButton>
+                {daysOfWeek.map((day) => {
+                  const logForGoal = getLogForGoal(goal, weekDates[day]);
+                  return (
+                    <TableCell key={day}>
+                      {logForGoal
+                        ? (
+                          <div>
+                            {logForGoal.note}
+                            {' '}
+                            DONE!
+                            <Button color="primary" onClick={() => handleClear(logForGoal)}>
+                              <BackspaceIcon />
+                            </Button>
+                            <IconButton onClick={() => {
+                              setCurrentGoal(goal);
+                              setEditedNote(logForGoal.note);
+                              setCurrentLog(logForGoal);
+                              setOpenModal(true);
+                            }}
+                            >
+                              <EditIcon />
+                            </IconButton>
 
-                        </div>
-                      )
-                      : (
-                        <Button color="secondary" onClick={() => handleCheck(goal, weekDates[day])}>
-                          <CheckIcon />
-                        </Button>
-                      )}
-                  </TableCell>
-                ))}
+                          </div>
+                        )
+                        : (
+                          <Button color="secondary" onClick={() => handleCheck(goal, weekDates[day])}>
+                            <CheckIcon />
+                          </Button>
+                        )}
+                    </TableCell>
+                  );
+                })}
               </TableRow>
             ))}
           </TableBody>
