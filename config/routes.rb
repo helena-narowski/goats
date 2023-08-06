@@ -19,6 +19,7 @@ Rails.application.routes.draw do
   # root "articles#index"
 
   # Catchall route that redirects user to the root path
-  match '*path', to: 'home#index', via: :all
-  # get '*path', to: 'home#index', constraints: ->(request) { !request.xhr? && request.format.html? }
+  # match '*path', to: 'home#index', via: :all
+  # match '*path', to: '/', via: :all
+  get '*path', to: 'home#index', constraints: ->(request) { !request.xhr? && request.format.html? }
 end

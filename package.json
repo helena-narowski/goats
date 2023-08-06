@@ -11,6 +11,7 @@
     "@hotwired/turbo-rails": "^7.3.0",
     "@mui/icons-material": "^5.14.3",
     "@mui/material": "^5.14.3",
+    "@mui/system": "^5.14.3",
     "babel-jest": "^29.6.2",
     "esbuild": "^0.18.17",
     "jest": "^29.6.2",
