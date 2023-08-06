@@ -16,9 +16,10 @@ const apiFetch = async (url, options) => {
 
   const result = await response.json();
 
+  console.log(result);
   if (!response.ok) {
     // throw new Error(`HTTP error! status: ${response.status}`);
-    throw new Error(`Error! ${result.error}`);
+    throw new Error(`Error! ${result?.error}`);
   }
 
   return result;

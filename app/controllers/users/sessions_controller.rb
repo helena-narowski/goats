@@ -1,6 +1,9 @@
 # frozen_string_literal: true
 
 class Users::SessionsController < Devise::SessionsController
+  include ActionController::MimeResponds
+
+  respond_to :json
   # before_action :configure_sign_in_params, only: [:create]
 
   # GET /resource/sign_in
