@@ -1,9 +1,11 @@
 import React, { Fragment, useState, useEffect } from 'react';
 import {
-  Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper,
+  Table, TableBody, TableCell, TableContainer, TableHead,
+  TableRow, Paper, IconButton, Dialog, TextField, Box, Typography,
   Snackbar,
 } from '@mui/material';
 import CheckIcon from '@mui/icons-material/Check';
+import EditIcon from '@mui/icons-material/Edit';
 import Button from '@mui/material/Button';
 import BackspaceIcon from '@mui/icons-material/Backspace';
 import Alert from '@mui/material/Alert';
@@ -14,6 +16,11 @@ import {
 
 function Week({ goals }) {
   const daysOfWeek = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+
+  const [openModal, setOpenModal] = useState(false);
+  const [currentLog, setCurrentLog] = useState(null);
+  const [currentGoal, setCurrentGoal] = useState(null);
+  const [editedNote, setEditedNote] = useState('');
 
   const [weekDates, setWeekDates] = useState({});
   const [logs, setLogs] = useState([]);
@@ -72,6 +79,17 @@ function Week({ goals }) {
       });
   };
 
+  const handleEditLog = (id, note) => {
+    updateLog(id, { note })
+      .then((data) => {
+        setLogs(logs.map((l) => (l.id === id ? { ...l, note } : l)));
+      })
+      .catch((error) => {
+        setSnackbarMessage(error);
+        setOpenSnackbar(true);
+      });
+  };
+
   return (
     <>
       <TableContainer component={Paper}>
@@ -100,10 +118,22 @@ function Week({ goals }) {
                     {getLogForGoal(goal, weekDates[day])
                       ? (
                         <div>
+                          {getLogForGoal(goal, weekDates[day]).note}
+                          {' '}
                           DONE!
                           <Button color="primary" onClick={() => handleClear(getLogForGoal(goal, weekDates[day]))}>
                             <BackspaceIcon />
                           </Button>
+                          <IconButton onClick={() => {
+                            setCurrentGoal(goal);
+                            setEditedNote(getLogForGoal(goal, weekDates[day]).note);
+                            setCurrentLog(getLogForGoal(goal, weekDates[day]));
+                            setOpenModal(true);
+                          }}
+                          >
+                            <EditIcon />
+                          </IconButton>
+
                         </div>
                       )
                       : (
@@ -118,6 +148,39 @@ function Week({ goals }) {
           </TableBody>
         </Table>
       </TableContainer>
+      <Dialog
+        open={openModal}
+        onClose={() => setOpenModal(false)}
+      >
+        <Box sx={{ width: 400 }}>
+          {' '}
+          {/* your styles here */}
+          <Typography variant="h6" component="h2">
+            Edit note for
+            {' '}
+            {currentGoal?.name}
+            {' '}
+            on
+            {' '}
+            {currentLog?.date}
+          </Typography>
+          <TextField
+            value={editedNote}
+            onChange={(e) => setEditedNote(e.target.value)}
+            label="Edit note"
+          />
+          <Button onClick={() => {
+            handleEditLog(currentLog?.id, editedNote);
+            setOpenModal(false);
+          }}
+          >
+            Save
+          </Button>
+          <Button onClick={() => setOpenModal(false)}>
+            Cancel
+          </Button>
+        </Box>
+      </Dialog>
       <Snackbar
         open={openSnackbar}
         autoHideDuration={6000}
