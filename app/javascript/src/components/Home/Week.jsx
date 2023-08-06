@@ -155,7 +155,7 @@ function Week({ goals }) {
         open={openModal}
         onClose={() => setOpenModal(false)}
       >
-        <Box sx={{ width: 400 }}>
+        <Box sx={{ width: 600 }}>
           {' '}
           {/* your styles here */}
           <Typography variant="h6" component="h2">
