@@ -81,7 +81,7 @@ function Week({ goals }) {
 
   const handleEditLog = (id, note) => {
     updateLog(id, { note })
-      .then((data) => {
+      .then(() => {
         setLogs(logs.map((l) => (l.id === id ? { ...l, note } : l)));
       })
       .catch((error) => {

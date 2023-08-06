@@ -34,6 +34,23 @@ class LogsController < ApplicationController
     end
   end
 
+  def team_logs
+    team = current_user.teams.first
+    team_logs = {}
+    team.users.each do |user|
+      next if user == current_user
+
+      goals_to_logs = {}
+      user.goals.each do |goal|
+        goals_to_logs[goal.id] = goal.logs
+      end
+
+      team_logs[user.email] = goals_to_logs
+    end
+
+    render json: team_logs
+  end
+
   private
 
   def goal
