@@ -5,7 +5,7 @@ Rails.application.routes.draw do
   # get '/', to: 'home#index'
   root to: 'home#index'
 
-  get '/home', to: 'home#index'
+  # get '/home', to: 'home#index'
 
   resources :goals
   resources :logs, except: :show
@@ -19,5 +19,6 @@ Rails.application.routes.draw do
   # root "articles#index"
 
   # Catchall route that redirects user to the root path
-  match '*path', to: redirect('/'), via: :all
+  match '*path', to: 'home#index', via: :all
+  # get '*path', to: 'home#index', constraints: ->(request) { !request.xhr? && request.format.html? }
 end

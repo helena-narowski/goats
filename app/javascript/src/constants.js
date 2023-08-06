@@ -1,3 +1,3 @@
-const CATEGORIES = ['Fitness', 'Cooking', 'Learning', 'Travel'];
+export const CATEGORIES = ['Fitness', 'Cooking', 'Learning', 'Travel'];
 
-export default { CATEGORIES };
+// export default { CATEGORIES };

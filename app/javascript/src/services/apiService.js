@@ -1,4 +1,4 @@
-const baseUrl = window.location.href;
+const baseUrl = window.location.origin;
 
 const token = document.getElementsByName('csrf-token')[0]?.content;
 
@@ -9,7 +9,7 @@ const headers = {
 };
 
 const apiFetch = async (url, options) => {
-  const response = await fetch(`${baseUrl}${url}`, {
+  const response = await fetch(`${baseUrl}/${url}`, {
     headers,
     ...options,
   });
