@@ -12,9 +12,8 @@ import {
 } from '../../services/goalService';
 
 import Week from './Week';
-import Team from './Team';
-
-// import './home.css';
+import Team from './Teams';
+import Goals from './Goals';
 
 const goat1 = require('../../images/goat1.jpg');
 const goat2 = require('../../images/goat2.jpeg');
@@ -25,54 +24,32 @@ const goat4 = require('../../images/goat4.jpeg');
 
 function Home() {
   const [goals, setGoals] = useState([]);
-  const [newGoal, setNewGoal] = useState('');
-  const [editingGoal, setEditingGoal] = useState(null);
-  const [editedName, setEditedName] = useState('');
-  const [editedCategory, setEditedCategory] = useState('');
-
-  const categories = ['Fitness', 'Cooking', 'Learning', 'Travel'];
-
-  const handleEditGoal = (goal) => {
-    setEditingGoal(goal);
-    setEditedName(goal.name);
-    setEditedCategory(goal.category);
-  };
-
-  const handleCancelEdit = () => {
-    setEditingGoal(null);
-  };
-
-  const handleNewGoalSubmit = (event) => {
-    event.preventDefault();
-    if (newGoal === '') return; // don't add empty goals
-
-    createGoal({ name: newGoal, category: 'Fitness' })
-      .then((data) => setGoals([...goals, data]))
-      .catch((error) => console.error('Error:', error));
-
-    setNewGoal(''); // clear the new goal input field
-  };
-
-  const handleDeleteGoal = (id) => {
-    deleteGoal(id)
-      .then(() => setGoals(goals.filter((goal) => goal.id !== id)))
-      .catch((error) => console.error('Error:', error));
-  };
-
-  const handleEditedGoalSubmit = () => {
-    updateGoal(editingGoal.id, { name: editedName, category: editedCategory })
-      .then((data) => {
-        setGoals(goals.map((goal) => (goal.id === data.goal.id ? data.goal : goal)));
-        setEditingGoal(null);
-      })
-      .catch((error) => console.error('Error:', error));
-  };
 
   useEffect(() => {
     getGoals()
       .then((data) => setGoals(data))
       .catch((error) => console.error(error));
   }, []);
+
+  const onCreateGoal = (name) => {
+    createGoal({ name, category: 'Fitness' })
+      .then((data) => setGoals([...goals, data]))
+      .catch((error) => console.error('Error:', error));
+  };
+
+  const onDeleteGoal = (id) => {
+    deleteGoal(id)
+      .then(() => setGoals(goals.filter((goal) => goal.id !== id)))
+      .catch((error) => console.error('Error:', error));
+  };
+
+  const onUpdateGoal = (id, editedName, editedCategory) => {
+    updateGoal(id, { name: editedName, category: editedCategory })
+      .then((data) => {
+        setGoals(goals.map((goal) => (goal.id === data.goal.id ? data.goal : goal)));
+      })
+      .catch((error) => console.error('Error:', error));
+  };
 
   return (
     <div>
@@ -96,59 +73,12 @@ function Home() {
       </Grid>
 
       <Typography variant="h2">Goals</Typography>
-      <List>
-        {goals.map((goal) => (
-          <ListItem key={goal.id}>
-            {editingGoal?.id === goal.id ? (
-              <>
-                <Input value={editedName} onChange={(e) => setEditedName(e.target.value)} />
-                <Select
-                  value={editedCategory}
-                  onChange={(e) => setEditedCategory(e.target.value)}
-                >
-                  {/* write me a loop for these menu items */}
-
-                  {categories.map((category) => (
-                    <MenuItem key={category} value={category}>{category}</MenuItem>
-                  ))}
-                </Select>
-                <Button onClick={handleEditedGoalSubmit}>Save</Button>
-                <IconButton onClick={handleCancelEdit} edge="end" aria-label="cancel">
-                  <CloseIcon />
-                </IconButton>
-              </>
-            ) : (
-              <>
-                {goal.name}
-                {' '}
-                -
-                {' '}
-                {goal.category}
-                <ListItemSecondaryAction>
-                  <IconButton onClick={() => handleEditGoal(goal)} aria-label="edit">
-                    <EditIcon />
-                  </IconButton>
-                  <IconButton onClick={() => handleDeleteGoal(goal.id)} aria-label="delete">
-                    <CancelIcon />
-                  </IconButton>
-                </ListItemSecondaryAction>
-              </>
-            )}
-          </ListItem>
-        ))}
-      </List>
-      <form onSubmit={handleNewGoalSubmit}>
-        <TextField
-          label="New Goal"
-          variant="outlined"
-          value={newGoal}
-          onChange={(e) => setNewGoal(e.target.value)}
-        />
-        <Button variant="contained" color="primary" type="submit">
-          Add Goal
-        </Button>
-      </form>
-
+      <Goals
+        goals={goals}
+        onCreateGoal={onCreateGoal}
+        onDeleteGoal={onDeleteGoal}
+        onUpdateGoal={onUpdateGoal}
+      />
       <Team />
       <Week goals={goals} />
     </div>

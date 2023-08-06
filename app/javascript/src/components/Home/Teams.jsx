@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import {
-  // eslint-disable-next-line no-unused-vars
   Button, TextField, List, ListItem, Typography, Grid, Container,
 } from '@mui/material';
 // import CancelIcon from '@mui/icons-material/Cancel';
@@ -19,7 +18,7 @@ function Team() {
     event.preventDefault();
     if (newTeam === '') return; // don't add empty goals
 
-    createTeam({ name: newTeam, category: 'Fitness' })
+    createTeam({ name: newTeam })
       .then((data) => setTeams([...teams, data]))
       .catch((error) => console.error('Error:', error));
 

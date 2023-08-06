@@ -8,19 +8,18 @@ import {
 } from 'react-router-dom';
 
 import Home from './Home/Home';
+import Teams from './Home/Teams';
 
 function App() {
   return (
-    <>
-      <div>whassup</div>
-      <Router>
-        <Routes>
-          <Route exact path="/" element={<Home />} />
-          <Route path="/home" element={<Home />} />
-          <Route render={() => <Navigate to="/" />} />
-        </Routes>
-      </Router>
-    </>
+    <Router>
+      <Routes>
+        <Route exact path="/" element={<Home />} />
+        <Route path="/home" element={<Home />} />
+        <Route path="/teams" element={<Teams />} />
+        <Route render={() => <Navigate to="/" />} />
+      </Routes>
+    </Router>
 
   );
 }
