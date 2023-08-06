@@ -66,11 +66,6 @@ function Home() {
       })
       .catch((error) => console.error('Error:', error));
   };
-  // const updateGoal = (id, newName) => {
-  //   updateGoal(id, { name: 'Updated Goal', category: 'Fitness' })
-  //     .then((data) => console.log(data))
-  //     .catch((error) => console.error('Error:', error));
-  // };
 
   useEffect(() => {
     getGoals()
@@ -141,20 +136,6 @@ function Home() {
           </ListItem>
         ))}
       </List>
-      {/* <List>
-        {goals.map((goal) => (
-          <ListItem key={goal.id}>
-            {goal.name}
-            {' '}
-            -
-            {' '}
-            {goal.category}
-            <IconButton onClick={() => handleDeleteGoal(goal.id)} edge="end" aria-label="delete">
-              <CancelIcon />
-            </IconButton>
-          </ListItem>
-        ))}
-      </List> */}
       <form onSubmit={handleNewGoalSubmit}>
         <TextField
           label="New Goal"
