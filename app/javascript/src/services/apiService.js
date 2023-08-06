@@ -1,14 +1,28 @@
-const url = 'http://localhost:3000/goals';
+const baseUrl = window.location.href;
 
-// eslint-disable-next-line import/prefer-default-export
-export async function getUserGoals() {
-  const response = await fetch(url);
+const token = document.getElementsByName('csrf-token')[0]?.content;
 
+const headers = {
+  'Content-Type': 'application/json',
+  Accept: 'application/json',
+  'X-CSRF-Token': token,
+};
+
+const apiFetch = async (url, options) => {
+  const response = await fetch(`${baseUrl}${url}`, {
+    headers,
+    ...options,
+  });
+
+  // idk if this works
   if (!response.ok) {
     throw new Error(`HTTP error! status: ${response.status}`);
-  } else {
-    const goals = await response.json();
-    console.log(goals);
-    return goals;
   }
-}
+
+  const result = await response.json();
+  // console.log(result);
+  // return response.json();
+  return result;
+};
+
+export default apiFetch;
