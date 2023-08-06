@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import {
+  // eslint-disable-next-line no-unused-vars
   Button, TextField, List, ListItem, Typography, Grid, Container,
 } from '@mui/material';
 // import CancelIcon from '@mui/icons-material/Cancel';
@@ -18,8 +19,8 @@ function Team() {
     event.preventDefault();
     if (newTeam === '') return; // don't add empty goals
 
-    createTeam({ name: newGoal, category: 'Fitness' })
-      .then((data) => setGoals([...goals, data]))
+    createTeam({ name: newTeam, category: 'Fitness' })
+      .then((data) => setTeams([...teams, data]))
       .catch((error) => console.error('Error:', error));
 
     setNewTeam(''); // clear the new goal input field
@@ -33,17 +34,24 @@ function Team() {
 
   return (
     <div>
-      Team
-
+      <Typography variant="h2">Teams</Typography>
+      {teams.map((team) => (
+        <ListItem key={team.id}>
+          <>
+            {team.name}
+            {' '}
+          </>
+        </ListItem>
+      ))}
       <form onSubmit={handleNewTeamSubmit}>
         <TextField
-          label="New Goal"
+          label="Team Name"
           variant="outlined"
-          value={newGoal}
+          value={newTeam}
           onChange={(e) => setNewTeam(e.target.value)}
         />
         <Button variant="contained" color="primary" type="submit">
-          Add Goal
+          Add Team
         </Button>
       </form>
     </div>

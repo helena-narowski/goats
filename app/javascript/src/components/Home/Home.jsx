@@ -12,6 +12,7 @@ import {
 } from '../../services/goalService';
 
 import Week from './Week';
+import Team from './Team';
 
 // import './home.css';
 
@@ -148,6 +149,7 @@ function Home() {
         </Button>
       </form>
 
+      <Team />
       <Week goals={goals} />
     </div>
   );

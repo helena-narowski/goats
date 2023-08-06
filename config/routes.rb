@@ -7,6 +7,7 @@ Rails.application.routes.draw do
 
   resources :goals
   resources :logs
+  resources :teams
   # get 'login'
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
