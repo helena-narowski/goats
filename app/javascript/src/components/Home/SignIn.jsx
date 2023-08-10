@@ -94,6 +94,7 @@ export default function SignIn() {
               label="Password"
               type="password"
               id="password"
+              error={!!error}
               autoComplete="current-password"
             />
             <FormControlLabel

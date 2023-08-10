@@ -43,7 +43,7 @@ const StyledButton = styled(Button)({
   transform: 'translate(-50%, -50%)',
   textShadow: '10px 10px 10px rgba(0, 0, 0, 0.5)',
   zIndex: 3,
-  width: '10%',
+  width: '300px',
   fontSize: '1.5rem',
 });
 
