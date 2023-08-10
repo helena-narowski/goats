@@ -14,9 +14,10 @@ const apiFetch = async (url, options) => {
     ...options,
   });
 
+  if (response.status === 204) return null;
+
   const result = await response.json();
 
-  console.log(result);
   if (!response.ok) {
     // throw new Error(`HTTP error! status: ${response.status}`);
     throw new Error(`Error! ${result?.error}`);

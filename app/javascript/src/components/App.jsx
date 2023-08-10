@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 
 import {
   Typography, Box, AppBar, Toolbar, IconButton, Button,
@@ -17,15 +17,29 @@ import {
 import { styled } from '@mui/system';
 import Home from './Home/Home';
 import Teams from './Home/Teams';
-import Login from './Home/Login';
+import Goals from './Home/Goals';
+import SignIn from './Home/SignIn';
 import SignUp from './Home/Signup';
+
+import { getCurrentUser, signOut } from '../services/usersService';
+
+import { UserContext } from '../contexts/UserContext';
 
 const StyledAppBar = styled(AppBar)({
   backgroundColor: 'purple',
-
 });
 
 function App() {
+  const [user, setUser] = useState(null);
+
+  useEffect(() => {
+    getCurrentUser().then((data) => setUser(data));
+  }, []);
+
+  const onSignOut = () => {
+    signOut().then(() => setUser(null));
+  };
+
   return (
     <Router>
       <Box sx={{ flexGrow: 1 }}>
@@ -41,28 +55,49 @@ function App() {
               <MenuIcon />
             </IconButton>
 
-            {/* <Button underline="none" component={Link} to="/your-route">Goats</Button> */}
             <Typography sx={{ flexGrow: 1 }}>
               <Button component={Link} to="/home" color="inherit">Home</Button>
-            </Typography>
-            {/* <Typography sx={{ flexGrow: 1 }}>
               <Button component={Link} to="/my_teams" color="inherit">Teams</Button>
-            </Typography> */}
+              <Button component={Link} to="/my_goals" color="inherit">Goals</Button>
+            </Typography>
 
-            <Button component={Link} to="/login" color="inherit">Login</Button>
+            {user && (
+              <>
+                <Typography>{user.email}</Typography>
+                <Button onClick={onSignOut} color="inherit">Sign Out</Button>
+              </>
+            )}
+
+            {!user && (
+              <Button component={Link} to="/signin" color="inherit">Signin</Button>
+            )}
+
           </Toolbar>
         </StyledAppBar>
       </Box>
 
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/home" element={<Home />} />
-        <Route path="/my_teams" element={<Teams />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/signup" element={<SignUp />} />
-        {/* <Route path="/sign_in" element={<Teams />} /> */}
-        {/* <Route path="*" element={<Navigate to="/" />} /> */}
-      </Routes>
+      <UserContext.Provider value={{ user, setUser }}>
+        <Routes>
+          {user ? (
+            <>
+              <Route path="/" element={<Home />} />
+              <Route path="/home" element={<Home />} />
+              <Route path="/my_teams" element={<Teams />} />
+              <Route path="/my_goals" element={<Goals />} />
+              <Route path="*" element={<Navigate to="/home" replace />} />
+            </>
+          ) : (
+            <>
+              <Route path="/" element={<Home />} />
+              <Route path="/home" element={<Home />} />
+              <Route path="/signin" element={<SignIn />} />
+              <Route path="/signup" element={<SignUp />} />
+              {/* Default redirect to signin if no user is logged in */}
+              {/* <Route path="*" element={<Navigate to="/signin" replace />} /> */}
+            </>
+          )}
+        </Routes>
+      </UserContext.Provider>
     </Router>
 
   );

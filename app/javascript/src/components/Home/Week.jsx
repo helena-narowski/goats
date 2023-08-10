@@ -66,6 +66,7 @@ function Week({ goals }) {
 
   const getLogForGoal = (goal, date) => {
     const isoDate = getIsoDate(date);
+    // const isoDate = date;
     const logForGoal = logs.find((log) => log.goal_id === goal.id && log.date === isoDate);
     return logForGoal;
   };
@@ -157,7 +158,6 @@ function Week({ goals }) {
       >
         <Box sx={{ width: 600 }}>
           {' '}
-          {/* your styles here */}
           <Typography variant="h6" component="h2">
             Edit note for
             {' '}

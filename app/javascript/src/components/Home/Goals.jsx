@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
-import PropTypes from 'prop-types';
 import {
-  List, ListItem, ListItemSecondaryAction, IconButton, Input, Select, MenuItem, Button, TextField,
+  List, ListItem, ListItemSecondaryAction, IconButton, Input,
+  Select, MenuItem, Button, TextField, Typography,
+
 } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
 import CloseIcon from '@mui/icons-material/Close';
@@ -10,13 +11,42 @@ import CancelIcon from '@mui/icons-material/Cancel';
 
 import { CATEGORIES } from '../../constants';
 
-function Goals({
-  goals, onCreateGoal, onDeleteGoal, onUpdateGoal,
-}) {
+import {
+  getGoals, createGoal, deleteGoal, updateGoal,
+} from '../../services/goalService';
+
+function Goals() {
+  const [goals, setGoals] = useState([]);
   const [newGoal, setNewGoal] = useState('');
   const [editingGoal, setEditingGoal] = useState(null);
   const [editedName, setEditedName] = useState('');
   const [editedCategory, setEditedCategory] = useState('');
+
+  useEffect(() => {
+    getGoals()
+      .then((data) => setGoals(data))
+      .catch((error) => console.error(error));
+  }, []);
+
+  const onCreateGoal = (name) => {
+    createGoal({ name, category: 'Fitness' })
+      .then((data) => setGoals([...goals, data]))
+      .catch((error) => console.error('Error:', error));
+  };
+
+  const onDeleteGoal = (id) => {
+    deleteGoal(id)
+      .then(() => setGoals(goals.filter((goal) => goal.id !== id)))
+      .catch((error) => console.error('Error:', error));
+  };
+
+  const onUpdateGoal = (id, editedName, editedCategory) => {
+    updateGoal(id, { name: editedName, category: editedCategory })
+      .then((data) => {
+        setGoals(goals.map((goal) => (goal.id === data.goal.id ? data.goal : goal)));
+      })
+      .catch((error) => console.error('Error:', error));
+  };
 
   const handleEditGoal = (goal) => {
     setEditingGoal(goal);
@@ -49,6 +79,7 @@ function Goals({
 
   return (
     <div>
+      <Typography variant="h2">Goals</Typography>
       <List>
         {goals.map((goal) => (
           <ListItem key={goal.id}>
@@ -104,15 +135,15 @@ function Goals({
   );
 }
 
-Goals.propTypes = {
-  goals: PropTypes.arrayOf(PropTypes.shape({
-    id: PropTypes.number,
-    name: PropTypes.string,
-    category: PropTypes.string,
-  })).isRequired,
-  onCreateGoal: PropTypes.func.isRequired,
-  onDeleteGoal: PropTypes.func.isRequired,
-  onUpdateGoal: PropTypes.func.isRequired,
-};
+// Goals.propTypes = {
+//   goals: PropTypes.arrayOf(PropTypes.shape({
+//     id: PropTypes.number,
+//     name: PropTypes.string,
+//     category: PropTypes.string,
+//   })).isRequired,
+//   onCreateGoal: PropTypes.func.isRequired,
+//   onDeleteGoal: PropTypes.func.isRequired,
+//   onUpdateGoal: PropTypes.func.isRequired,
+// };
 
 export default Goals;
