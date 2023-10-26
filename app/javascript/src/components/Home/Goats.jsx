@@ -34,6 +34,7 @@ const StyledTypography = styled(Typography)({
   zIndex: 2,
 });
 
+// use flexbox instead here
 const StyledButton = styled(Button)({
   position: 'absolute',
   top: '80%',

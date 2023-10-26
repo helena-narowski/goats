@@ -14,7 +14,11 @@ import {
   getLogs, createLog, deleteLog, updateLog,
 } from '../../services/logService';
 
-function Week({ goals }) {
+import {
+  getGoals,
+} from '../../services/goalService';
+
+function Week() {
   const daysOfWeek = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
 
   const [openModal, setOpenModal] = useState(false);
@@ -24,22 +28,22 @@ function Week({ goals }) {
 
   const [weekDates, setWeekDates] = useState({});
   const [logs, setLogs] = useState([]);
+  const [goals, setGoals] = useState([]);
   const [openSnackbar, setOpenSnackbar] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState('');
 
   useEffect(() => {
-    const dates = {};
     const today = new Date();
     const dayOfWeek = today.getDay();
     const diff = dayOfWeek === 0 ? -6 : 1 - dayOfWeek;
 
-    for (let i = 0; i < 7; i++) {
-      const date = new Date();
+    // Reduce is like ruby's inject or each with object
+    const dates = daysOfWeek.reduce((acc, dayName, i) => {
+      const date = new Date(today);
       date.setDate(today.getDate() + diff + i);
-      const dayName = daysOfWeek[i];
-      dates[dayName] = date.toLocaleDateString();
-      // This will format the date as MM/DD/YYYY. Adjust the format as needed.
-    }
+      acc[dayName] = date.toLocaleDateString();
+      return acc;
+    }, {});
 
     setWeekDates(dates);
   }, []);
@@ -50,6 +54,12 @@ function Week({ goals }) {
     getLogs().then((data) => setLogs(data))
       .catch((error) => console.error(error));
   }, [weekDates]);
+
+  useEffect(() => {
+    getGoals()
+      .then((data) => setGoals(data))
+      .catch((error) => console.error(error));
+  }, []);
 
   const getIsoDate = (date) => new Date(date).toISOString().split('T')[0];
 
@@ -93,6 +103,7 @@ function Week({ goals }) {
 
   return (
     <>
+      <Typography variant="h2">This Week</Typography>
       <TableContainer component={Paper}>
         <Table>
           <TableHead>

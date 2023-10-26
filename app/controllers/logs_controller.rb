@@ -8,7 +8,6 @@ class LogsController < ApplicationController
   end
 
   def create
-    # binding.irb
     new_log = Log.create(log_params)
 
     if new_log.valid?
